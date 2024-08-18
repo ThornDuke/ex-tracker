@@ -74,6 +74,44 @@ const createAndSaveExercise = (exercise, done) => {
     });
 };
 
+const findLogForUserId = (id, from, to, limit, done) => {
+  // find the username
+  models.userModel
+    .findById(id)
+    .then((doc) => {
+      if (doc == null) {
+        done(null, null);
+      } else {
+        username = doc.username;
+        // find exercises
+        models.exerciseModel
+          .find({
+            userId: id,
+            date: {
+              $gte: from ? new Date(from) : new Date("1970-01-01"),
+              $lte: to ? new Date(to) : new Date(Date.now()),
+            },
+          })
+          .limit(limit ? limit : null)
+          .then((doc) => {
+            count = doc.length;
+            const response = {
+              username,
+              count,
+              _id: id,
+              log: doc.map((item) => {
+                const { description, duration, date } = item;
+                return { description, duration, date: date.toDateString() };
+              }),
+            };
+            done(null, response);
+          });
+      }
+    })
+    .catch((err) => done(err));
+};
+
 exports.createAndSaveUser = createAndSaveUser;
 exports.findAllUsers = findAllUsers;
 exports.createAndSaveExercise = createAndSaveExercise;
+exports.findLogForUserId = findLogForUserId;

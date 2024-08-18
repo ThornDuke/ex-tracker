@@ -11,7 +11,7 @@ const exerciseSchema = mongoose.Schema({
   userId: mongoose.ObjectId,
   description: String,
   duration: Number,
-  date: String,
+  date: Date,
 });
 
 module.exports = {

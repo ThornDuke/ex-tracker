@@ -20,6 +20,37 @@ app.get("/hello", (req, res) => {
   });
 });
 
+app.get("/api/users", (req, res) => {
+  dbmanager.findAllUsers((err, data) => {
+    if (err) {
+      res.json({
+        error: "error searching the list of users",
+      });
+    } else {
+      res.json(data);
+    }
+  });
+});
+
+app.get("/api/users/:_id/logs", (req, res) => {
+  const id = req.params._id;
+  const { from, to, limit } = req.query ? req.query : null;
+
+  dbmanager.findLogForUserId(id, from, to, limit, (err, data) => {
+    if (err) {
+      res.json({
+        error: `error searching the log for the userid ${id}`,
+      });
+    } else {
+      if (data) {
+        res.json(data);
+      } else {
+        res.json({ status: `the supplied id doesn't return any exercise` });
+      }
+    }
+  });
+});
+
 app.post("/api/users", urlEncodedParser, (req, res) => {
   const name = req.body.username;
 
@@ -68,20 +99,6 @@ app.post("/api/users/:_id/exercises", urlEncodedParser, (req, res) => {
           error: "there isn't any user with the supplied id",
         });
       }
-    }
-  });
-});
-
-app.get("/api/users", (req, res) => {
-  dbmanager.findAllUsers((err, data) => {
-    if (err) {
-      res.json({
-        error: "error searching the list of users",
-      });
-    } else {
-      res.json({
-        users: data,
-      });
     }
   });
 });
