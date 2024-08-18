@@ -91,7 +91,7 @@ app.post("/api/users/:_id/exercises", urlEncodedParser, (req, res) => {
           username,
           description,
           duration,
-          date,
+          date: new Date(date).toDateString(),
           _id,
         });
       } else {
