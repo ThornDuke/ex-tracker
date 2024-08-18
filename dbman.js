@@ -24,4 +24,16 @@ const createAndSaveUser = (user, done) => {
     .catch((err) => console.log(err));
 };
 
+const findAllUsers = (done) => {
+  models.userModel
+    .find({})
+    .then((doc) => {
+      done(null, doc);
+    })
+    .catch((err) => {
+      done(err);
+    });
+};
+
 exports.createAndSaveUser = createAndSaveUser;
+exports.findAllUsers = findAllUsers;

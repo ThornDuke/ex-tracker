@@ -41,6 +41,20 @@ app.post("/api/users", urlEncodedParser, (req, res) => {
   });
 });
 
+app.get("/api/users", (req, res) => {
+  dbmanager.findAllUsers((err, data) => {
+    if (err) {
+      res.json({
+        error: "error searching the list of users",
+      });
+    } else {
+      res.json({
+        users: data,
+      });
+    }
+  });
+});
+
 const listener = app.listen(process.env.PORT || 3000, () => {
   console.log("Your app is listening on port " + listener.address().port);
 });
