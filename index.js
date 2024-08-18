@@ -41,6 +41,37 @@ app.post("/api/users", urlEncodedParser, (req, res) => {
   });
 });
 
+app.post("/api/users/:_id/exercises", urlEncodedParser, (req, res) => {
+  const exercise = {
+    _id: req.params._id,
+    description: req.body.description,
+    duration: req.body.duration,
+    date: req.body.date,
+  };
+  dbmanager.createAndSaveExercise(exercise, (err, data) => {
+    if (err) {
+      res.json({
+        error: `error creating a new exercise: "${err}"`,
+      });
+    } else {
+      if (data) {
+        const { username, description, duration, date, _id } = data;
+        res.json({
+          username,
+          description,
+          duration,
+          date,
+          _id,
+        });
+      } else {
+        res.json({
+          error: "there isn't any user with the supplied id",
+        });
+      }
+    }
+  });
+});
+
 app.get("/api/users", (req, res) => {
   dbmanager.findAllUsers((err, data) => {
     if (err) {
