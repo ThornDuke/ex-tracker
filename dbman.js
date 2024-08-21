@@ -37,6 +37,7 @@ const findAllUsers = (done) => {
 
 const createAndSaveExercise = (exercise, done) => {
   const id = exercise._id;
+
   // search for an existing id
   models.userModel
     .findById(id)

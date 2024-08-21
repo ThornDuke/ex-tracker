@@ -73,8 +73,9 @@ app.post("/api/users", urlEncodedParser, (req, res) => {
 });
 
 app.post("/api/users/:_id/exercises", urlEncodedParser, (req, res) => {
+  const userId = req.params._id;
   const exercise = {
-    _id: req.params._id,
+    _id: userId,
     description: req.body.description,
     duration: req.body.duration,
     date: req.body.date,
@@ -88,11 +89,11 @@ app.post("/api/users/:_id/exercises", urlEncodedParser, (req, res) => {
       if (data) {
         const { username, description, duration, date, _id } = data;
         res.json({
+          _id: userId,
           username,
-          description,
-          duration,
           date: new Date(date).toDateString(),
-          _id,
+          duration,
+          description,
         });
       } else {
         res.json({
